@@ -1,0 +1,21 @@
+name: rpitems
+main: net.gamerservices.rpitems.rpitems
+version: 0.01
+website: http://www.fallofanempire.com
+author: Mixxit
+database: true
+description: >
+             Extends rpchat by adding roleplay abilities and items
+commands:
+  queryitem:
+    aliases: [qi]
+    description: Queries an item in your hand
+    usage: |
+           /<command> 
+           Example: /<command> 
+  assignitem:
+    aliases: [ai]
+    description: Assigns an item id to an item in your hand
+    usage: |
+           /<command> [itemid]
+           Example: /<command> 5
