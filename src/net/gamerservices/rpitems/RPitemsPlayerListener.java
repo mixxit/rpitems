@@ -10,9 +10,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
+
+import com.sun.corba.se.spi.orbutil.fsm.Action;
 
 public class RPitemsPlayerListener implements Listener {
 
@@ -22,70 +25,78 @@ public class RPitemsPlayerListener implements Listener {
 		this.parent = rpitems;
 	}
 	
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onPlayerInteract(PlayerInteractEntityEvent event)
+	{
+		if(!event.isCancelled()){
+			Player player = event.getPlayer();
+			
+			if (player.getItemInHand().getData().getItemType() == Material.PAPER)
+			{
+				int itemid = 0;
+				
+				for (Map.Entry<Enchantment,Integer> e : player.getItemInHand().getEnchantments().entrySet())
+				{
+					itemid = e.getValue();
+				}
+				
+				if (itemid > 0)
+				{
+					this.parent.useItem(itemid, player,event.getRightClicked());
+				}
+			}
+		}
+	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
-		Player player = event.getPlayer();
+		if(!event.isCancelled()){ 
 		
-		if (player.getItemInHand().getData().getItemType() == Material.PAPER)
-		{
-			int itemid = 0;
+			Player player = event.getPlayer();
 			
-			for (Map.Entry<Enchantment,Integer> e : player.getItemInHand().getEnchantments().entrySet())
+			if (player.getItemInHand().getData().getItemType() == Material.PAPER)
 			{
-				itemid = e.getValue();
+				int itemid = 0;
+				
+				for (Map.Entry<Enchantment,Integer> e : player.getItemInHand().getEnchantments().entrySet())
+				{
+					itemid = e.getValue();
+				}
+				
+				if (itemid > 0)
+				{
+					this.parent.useItem(itemid, player,event.getAction());
+				}
 			}
-			
-			if (itemid > 0)
-			{
-				//
-				this.parent.useItem(itemid, player);
-			}
-			
-			
 		}
 
 	}	
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerPickupItem(PlayerPickupItemEvent event)
 	{
-		int itemid = 0;
-		if (event.getItem().getItemStack().getData().getItemType() == Material.PAPER)
-		{
-			for (Map.Entry<Enchantment,Integer> e : event.getItem().getItemStack().getEnchantments().entrySet())
-			{
-				itemid = e.getValue();
-			}
-			if (itemid > 0)
-			{
-				System.out.println("Picked up an item ID of: " + itemid);
-				event.getPlayer().sendMessage("You picked up " + parent.getItemName(itemid));
-			}
-		}
-		
-		
-		
-		/*
-		 * 
-		 * Playing around storing data on enchantments (probably not usable)
-		boolean hasData = false;
-		
-		for (Map.Entry<Enchantment,Integer> e : event.getItem().getItemStack().getEnchantments().entrySet())
-		{
-			System.out.println("Item Pickup was: " + e.getKey() + " " + e.getValue());
-			hasData = true;
-		}
-		if (hasData == false)
-		{
-			Enchantment ench = new EnchantmentWrapper(5); 
+		if(!event.isCancelled()){
+			int nextfree = event.getPlayer().getInventory().firstEmpty();
 			
-			int level = 10000;
-			event.getItem().getItemStack().addUnsafeEnchantment(ench, level);
-			System.out.println("Added ID to item type of: " + level); 
-		}	
-		
-		*/
+			if (nextfree != -1)
+			{
+				int itemid = 0;
+				if (event.getItem().getItemStack().getData().getItemType() == Material.PAPER)
+				{
+					for (Map.Entry<Enchantment,Integer> e : event.getItem().getItemStack().getEnchantments().entrySet())
+					{
+						itemid = e.getValue();
+					}
+					if (itemid > 0)
+					{
+						System.out.println(event.getPlayer().getName() + " picked up : " + parent.getItemName(itemid));
+						event.getPlayer().sendMessage("You picked up " + parent.getItemName(itemid) + " (/queryitem for more info)");
+					}
+				}
+			} else {
+				// work around for full inventory
+			}
+		}
 	}
 
 }
