@@ -37,17 +37,23 @@ public class QueryItem implements CommandExecutor {
 			
 			if (itemid > 0)
 			{
-				player.sendMessage("Item Name: " + this.parent.getItemName(itemid));
-				player.sendMessage("Item Lore: " + this.parent.getItemLore(itemid));
-				player.sendMessage("Races Req: " + this.parent.getItemRaces(itemid));
-				player.sendMessage("Alliance Req: " + this.parent.getItemAlliances(itemid));
-				player.sendMessage("Power Cost: " + this.parent.getSpellPowerCost(itemid));
-				player.sendMessage("Com: " + this.parent.getCombatItemLevel(itemid) + " Ran: " + this.parent.getRangedItemLevel(itemid) + " Scho: "+ this.parent.getScholarlyItemLevel(itemid)+ " Nat: " + this.parent.getNaturalItemLevel(itemid));
+				this.parent.queryItem(player,itemid);
 				
 				return true;
 			}
 		}
-		
+		if (player.getItemInHand().getData().getItemType() == Material.WRITTEN_BOOK)
+		{
+			int itemid = 0;
+			itemid = this.parent.getItemIdFromItemStack(player.getItemInHand());
+			
+			if (itemid > 0)
+			{
+				this.parent.queryItem(player,itemid);
+				
+				return true;
+			}
+		}
 		
 		
 		return false;

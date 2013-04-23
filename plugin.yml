@@ -1,4 +1,5 @@
 name: rpitems
+depend: [Vault,rpchat,Essentials]
 main: net.gamerservices.rpitems.rpitems
 version: 0.01
 website: http://www.fallofanempire.com
@@ -7,9 +8,33 @@ database: true
 description: >
              Extends rpchat by adding roleplay abilities and items
 commands:
+  spellkit:
+    aliases: []
+    description: Gives you a set of level 1 spells
+    usage: |
+           /<command> 
+           Example: /<command> 
+  convertspell:
+    aliases: [cspell]
+    description: Converts an item in your hand
+    usage: |
+           /<command> 
+           Example: /<command> 
   queryitem:
     aliases: [qi]
     description: Queries an item in your hand
+    usage: |
+           /<command> 
+           Example: /<command> 
+  vaccept:
+    aliases: []
+    description: Turns you into a vampire
+    usage: |
+           /<command> 
+           Example: /<command> 
+  reloadabilities:
+    aliases: []
+    description: reloads abilities
     usage: |
            /<command> 
            Example: /<command> 
